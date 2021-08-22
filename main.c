@@ -2,12 +2,9 @@
 #include <stdlib.h>
 #define TAM_MAX 6
 
-// Ask the vector value and return
-// the dinamic allocation
-int print_vetor(int vet[], int tamanho)
+int printVetor(int vet[], int tamanho)
 {
   int counter = 0;
-  printf("{ ");
   for (int i = 0; i < tamanho; i++)
   {
     if (vet[i] != 0)
@@ -19,15 +16,95 @@ int print_vetor(int vet[], int tamanho)
       }
       else
       {
-        printf("%d,", vet[i]);
+        printf("%d, ", vet[i]);
       }
     }
   }
-  printf(" }\n");
+  printf("\n");
   return counter;
 }
 
-int pedir_vetor(int *vetor)
+void insertionSort(int vetor[], int tamanho, int hidden)
+{
+  int i, key, j;
+  int comp = 0, troca = 0;
+
+  for (i = 1; i < tamanho; i++)
+  {
+    key = vetor[i];
+    j = i - 1;
+    comp++;
+
+    while (j >= 0 && vetor[j] > key)
+    {
+      vetor[j + 1] = vetor[j];
+      j = j - 1;
+
+      comp++;
+      troca++;
+    }
+
+    vetor[j + 1] = key;
+  }
+
+  if (hidden)
+  {
+    printf("Insertion Sort: comparacoes: %d trocas: %d\n", comp, troca);
+  }
+}
+
+void swap(int *xp, int *yp)
+{
+  int temp = *xp;
+  *xp = *yp;
+  *yp = temp;
+}
+
+void selectionSort(int vetor[], int tamanho)
+{
+  int i, j, min_idx, comp = 0, troca = 0;
+
+  for (i = 0; i < tamanho - 1; i++)
+  {
+    min_idx = i;
+    for (j = i + 1; j < tamanho; j++)
+    {
+      if (vetor[j] < vetor[min_idx])
+      {
+        troca++;
+        min_idx = j;
+      }
+      comp++;
+    }
+    if (vetor[min_idx] != vetor[i])
+      troca++;
+
+    swap(&vetor[min_idx], &vetor[i]);
+  }
+
+  printf("Selection Sort: comparacoes: %d trocas: %d\n", comp, troca);
+}
+
+void bubbleSort(int vetor[], int tamanho)
+{
+  int i, j, comp = 0, troca = 0;
+
+  for (i = 0; i < tamanho - 1; i++)
+
+    for (j = 0; j < tamanho - i - 1; j++)
+    {
+      if (vetor[j] > vetor[j + 1])
+      {
+        swap(&vetor[j], &vetor[j + 1]);
+        troca++;
+      }
+      comp++;
+    }
+
+  printf("Bubble Sort: comparacoes: %d trocas: %d\n", comp, troca);
+}
+
+int pedirVetor(int *vetor)
 {
 
   for (int i = 0; i < TAM_MAX; i++)
@@ -51,8 +128,7 @@ int pedir_vetor(int *vetor)
     }
   }
 
-  int qnt_inputs = print_vetor(vetor, TAM_MAX);
-  printf("Valores inseridos: %d\n", qnt_inputs);
+  int qnt_inputs = printVetor(vetor, TAM_MAX);
 
   return qnt_inputs;
 }
@@ -60,18 +136,28 @@ int pedir_vetor(int *vetor)
 int main()
 {
   int *vetor = (int *)malloc(TAM_MAX * sizeof(int));
-  int qnt_input = pedir_vetor(vetor);
-  int *vetor_inputs = (int *)malloc(qnt_input * sizeof(int));
+  int qnt_input = pedirVetor(vetor);
   
+  int *vetor_insertion = (int *)malloc(qnt_input * sizeof(int));
+  int *vetor_selection = (int *)malloc(qnt_input * sizeof(int));
+  int *vetor_bubble = (int *)malloc(qnt_input * sizeof(int));
+
   for (int i = 0; i < qnt_input; i++)
   {
-    vetor_inputs[i] = vetor[i];
+    vetor_insertion[i] = vetor[i];
+    vetor_selection[i] = vetor[i];
+    vetor_bubble[i] = vetor[i];
   }
-  
-  free(vetor);
-  
-  print_vetor(vetor_inputs, qnt_input);
 
+  system("cls");
+  printf("Vetor ordenado: ");
+  insertionSort(vetor, qnt_input, 0);
+  printVetor(vetor, qnt_input);
+  free(vetor);
+
+  insertionSort(vetor_insertion, qnt_input, 1);
+  selectionSort(vetor_selection, qnt_input);
+  bubbleSort(vetor_bubble, qnt_input);
 
   return 0;
 }
