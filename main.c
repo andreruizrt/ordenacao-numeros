@@ -32,19 +32,20 @@ int main()
   for (int i = 0; i < TAM_MAX; i++)
   {
     if (i > 0)
+    {
       printf("Restam %d valores que ainda podem ser digitados.\n", TAM_MAX - i);
+    }
 
-    printf("Digite 0 para sair\n");
     printf("Digite um valor: ");
     scanf("%d", &numeros[i]);
 
     if (numeros[i] == 0)
       break;
 
-    if (numeros[i] < 0 && numeros[i] > 100)
+    if (numeros[i] < 0 || numeros[i] > 100)
     {
       printf("Esse valor nao está no intervalo!\n");
-      printf("Digite novamente!\n");
+      printf("Digite novamente!\n\n");
       i--;
     }
   }
